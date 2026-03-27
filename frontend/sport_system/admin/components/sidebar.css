@@ -1,0 +1,26 @@
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.btn-manager a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding: 0 20px;
+    background-color: #1e293b;
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.btn-manager a:hover {
+    background-color: navy;
+    padding-left: 25px;
+}
+
+.sidebar{
+    background-color: #1e293b;
+}
