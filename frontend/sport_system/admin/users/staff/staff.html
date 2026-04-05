@@ -1,0 +1,153 @@
+<div class="container mt-4">
+    <!-- FORM -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header custom-header">
+            User Form
+        </div>
+
+        <div class="card-body">
+            <form id="form-staff">
+                <input type="hidden" name="id" id="id">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="username" name="username">
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email">
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Role</label>
+                            <select class="form-select" id="role" name="role">
+                                <option>USER</option>
+                                <option>ADMIN</option>
+                            </select>
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" id="status" name="status">
+                                <option>ACTIVE</option>
+                                <option>INACTIVE</option>
+                            </select>
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="form-group">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" name="phone">
+                            <div><span class="form-messenger"></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="submit" class="btn btn-success btnSave">
+                        <i class="bi bi-check"></i> Save
+                    </button>
+                    <button type="reset" class="btn btn-secondary btnReset">
+                        Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="card shadow-sm">
+        <div class="card-header custom-header d-flex justify-content-between align-items-center">
+            <span>User List</span>
+            <button class="btn btn-success btn-sm btnAdd">
+                <i class="bi bi-plus"></i> Add User
+            </button>
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th></th>
+                        <th>Index</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th width="150">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td>1</td>
+                        <td>admin</td>
+                        <td>admin@gmail.com</td>
+                        <td><span class="role-badge role-admin">ADMIN</span></td>
+                        <td><span class="status-active">ACTIVE</span></td>
+                        <td>
+                            <button class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <div class="dialog-box"></div>
+
+    <!-- Paging -->
+    <div class="paging">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script type="module" src="./staff.js"></script>

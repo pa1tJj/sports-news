@@ -1,0 +1,156 @@
+
+<div class="container-fluid py-4 bg-light">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800"></h1>
+        <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <i class="fas fa-download fa-sm text-white-50"></i> Xuất báo cáo
+        </button>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start border-primary border-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1" >Tổng Bài Viết</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalPosts">1,245</div>
+                        </div>
+                        <div class="col-auto"><span class="h2 text-gray-300">📰</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start border-success border-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Tổng Lượt Xem</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalViews">45,890</div>
+                        </div>
+                        <div class="col-auto"><span class="h2 text-gray-300">👁️</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start border-warning border-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Bình Luận Mới</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">32</div>
+                        </div>
+                        <div class="col-auto"><span class="h2 text-gray-300">💬</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start border-info border-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Thành Viên</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800" id="totalUsers">890</div>
+                        </div>
+                        <div class="col-auto"><span class="h2 text-gray-300">👥</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Thống kê lượt xem 7 ngày qua</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area" style="height: 300px; position: relative;">
+                        <canvas id="viewsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-primary">Tỷ trọng Danh mục</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie" style="height: 300px; position: relative;">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-dark">Top Bài Viết Xem Nhiều</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="top-posts">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Lượt xem</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Nhận định trận chung kết...</td>
+                                    <td><span class="badge bg-primary">1,200</span></td>
+                                    <td><span class="badge bg-success">Active</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3 bg-white">
+                    <h6 class="m-0 font-weight-bold text-dark">Bình Luận Mới Nhất</h6>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0" id="new-comments">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Nội dung</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Phân tích rất hay!</td>
+                                    <td><span class="badge bg-warning text-dark">Pending</span></td>
+                                    <td><button class="btn btn-sm btn-outline-success">Duyệt</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="./charts.js"></script>

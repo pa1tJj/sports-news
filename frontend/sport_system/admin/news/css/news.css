@@ -1,0 +1,21 @@
+.search {
+    height: 170px;
+    margin: 20px 10px;
+    background-color: rgb(238, 238, 243);
+    padding: 10px;
+    border-radius: 5px;
+}
+.table-data {
+    height: 400px;
+    margin: 10px;
+}
+.paging {
+    height: 50px;
+    align-items: center;
+    justify-items: center;
+}
+
+.table-data table{
+    margin-top: 3px;
+    height: auto;
+}
