@@ -1,0 +1,37 @@
+# Thư mục chứa các thư viện bên thứ ba (nếu bạn dùng npm)
+node_modules/
+jspm_packages/
+
+# Các tệp tin môi trường (chứa API Keys, mật khẩu, biến nhạy cảm)
+.env
+*.env.local
+*.env.development.local
+*.env.test.local
+*.env.production.local
+
+# Nhật ký lỗi (Logs)
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Tệp tin hệ thống (Hệ điều hành tự sinh ra)
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Thư mục build/output (nếu bạn dùng công cụ đóng gói như Webpack, Vite, Parcel)
+dist/
+out/
+build/
+.cache/
+
+# Các tệp tin cấu hình của IDE/Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
