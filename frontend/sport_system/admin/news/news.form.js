@@ -8,7 +8,7 @@ const PARAMS = new URLSearchParams(window.location.search);
 async function loadHeader() {
     const res = await fetch("../components/header.html");
     const html = await res.text();
-    document.querySelector(".header").innerHTML = html;
+    document.querySelector(".my-header").innerHTML = html;
 }
 loadHeader();
 
@@ -16,9 +16,9 @@ async function newsEditFormResponse() {
     // lấy dữ liệu trên param 
     const id = PARAMS.get("id"); //lấy id trên param
     const responses = await getApiEdit(id);
-    populateSelectOptionsNewsEditForm(responses.categories, responses.newsDetailResponse.categories, "#category");
+    populateSelectOptionsNewsEditForm(responses.categories, responses.newsDetailResponse.categories, "#categories");
     populateSelectOptionsNewsEditForm(responses.status, responses.newsDetailResponse.status, "#status");
-    populateSelectOptionsNewsEditForm(responses.tags, responses.newsDetailResponse.tags, "#tag");
+    populateSelectOptionsNewsEditForm(responses.tags, responses.newsDetailResponse.tags, "#tags");
     loadNewsDetail(responses.newsDetailResponse);
 }
 
@@ -29,6 +29,10 @@ function loadNewsDetail(data) {
         if (input) {
             if (input.type === "checkbox") {
                 input.checked = data[item];
+            } else if (input.tagName === "SELECT") {
+                if (!input.multiple) {
+                    input.value = data[item];
+                }
             } else {
                 input.value = data[item];
             }
@@ -41,13 +45,12 @@ function loadNewsDetail(data) {
     if (editorInstance) {
         editorInstance.setData(data.content);
     }
-
 }
 
 async function loadOptionForm() {
     const response = await getApiFormData();
-    populateSelectOptions(response.categories, "#category");
-    populateSelectOptions(response.tags, "#tag");
+    populateSelectOptions(response.categories, "#categories");
+    populateSelectOptions(response.tags, "#tags");
     populateSelectOptions(response.status, "#status");
 }
 
@@ -62,9 +65,9 @@ export function renderFormNews() {
 renderFormNews();
 
 export async function getSaveNews() {
-    const categories = document.querySelector("#category");
+    const categories = document.querySelector("#categories");
     const status = document.querySelector("#status").value;
-    const tags = document.querySelector("#tag");
+    const tags = document.querySelector("#tags");
     const data = {
         id: PARAMS.get("id") || null,
         title: document.querySelector("#title").value,
@@ -72,11 +75,11 @@ export async function getSaveNews() {
         content: editorInstance.getData(),
         summary: document.querySelector("#summary").value,
         thumbnail: document.querySelector("#thumbnail"),
-        category: Array.from(categories.selectedOptions).map(
+        categories: Array.from(categories.selectedOptions).map(
             (option) => option.value,
         ),
         status: status,
-        tag: Array.from(tags.selectedOptions).map((option) => option.value),
+        tags: Array.from(tags.selectedOptions).map((option) => option.value),
         isFeatured: document.querySelector("#isFeatured").checked,
     };
     getApiSaveNews(data);
@@ -100,9 +103,9 @@ Validator({
         Validator.isRequiredEditor("#content", function () {
             return editorInstance.getData();
         }),
-        Validator.isRequired("#category"),
+        Validator.isRequired("#categories"),
         Validator.isRequired("#status"),
-        Validator.isRequired("#tag")
+        Validator.isRequired("#tags")
     ],
     onSubmit: function() {
         getSaveNews()

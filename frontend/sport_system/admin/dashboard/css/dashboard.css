@@ -1,0 +1,6 @@
+/* Đảm bảo vùng chứa biểu đồ có kích thước thực tế */
+.chart-area, .chart-pie {
+    position: relative;
+    height: 320px !important; /* Thêm !important để ép trình duyệt nhận chiều cao */
+    width: 100%;
+}

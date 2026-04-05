@@ -22,17 +22,19 @@ export function populateSelectOptionsNewsEditForm(options1, options2, id) {
     let defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.text = "--Choose--";
-    defaultOption.selected = true;
     dataSelect.appendChild(defaultOption);
-    Object.entries(options1).forEach(function(item) {
+    Object.entries(options1).forEach(([key, value]) => {
         let option = document.createElement("option");
-        option.value = item[0];
-        option.text = item[1];
-        Object.entries(options2).forEach(it => {
-            if(it[0] === item[0]) {
-                option.selected = true;
-            }
-        })
+        option.value = key;
+        option.text = value;
+        // Object.entries(options2).forEach(it => {
+        //     if(it[0] === item[0]) {
+        //         option.selected = true;
+        //     }
+        // })
+        if (options2 && options2[key] !== undefined) {
+            option.selected = true;
+        }
         dataSelect.appendChild(option);
     })
 }

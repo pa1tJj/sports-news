@@ -37,10 +37,10 @@ export function Validator(options) {
     }
     if (errorMassage) {
       errorElement.innerText = errorMassage;
-      inputElement.parentElement.classList.add("invalid");
+      getParent(inputElement, options.formGroupSelector).classList.add("invalid");
     } else {
       errorElement.innerText = "";
-      inputElement.parentElement.classList.remove("invalid");
+      getParent(inputElement, options.formGroupSelector).classList.add("invalid");
     }
     return !errorMassage;
   }
@@ -165,7 +165,6 @@ Validator.isRequiredEditor = function (selector, getEditorData) {
       var value = getEditorData()
         .replace(/<[^>]*>/g, '') // bỏ HTML
         .trim();
-
       return value ? undefined : "Vui lòng nhập nội dung";
     },
   };

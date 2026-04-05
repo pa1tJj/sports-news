@@ -1,63 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../components/sidebar.css">
-</head>
-<body>
-    <div class="sidebar">
-        <ul>
-            <li class="btn-manager">
-                <a href="" id="dashboard">
-                    <span>Dashboard</span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li class="btn-manager">
-                <a href="" id="news">
-                    <span>Quản lí tin tức</span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li class="btn-manager">
-                <a href="" id="article">
-                    <span>Quản lí bài viết</span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li class="btn-manager">
-                <a href="">
-                    <span>Quản lí giải đấu</span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li class="btn-manager">
-                <a href="" id="users">
-                    <span>Quản lí người dùng</span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-        <ul>
-            <li class="btn-manager">
-                <a href="">
-                    <span>Quản lí tags </span>
-                    <span>&#8250;</span>
-                </a>
-            </li>
-        </ul>
-    </div>
+<ul>
+    <li class="btn-manager">
+        <a href="" id="dashboard">
+            <span>Dashboard</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="" id="news">
+            <span>News</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="" id="categories">
+            <span>Categories</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="" id="tags">
+            <span>Tags</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="">
+            <span>Comments</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="#userMenu" data-bs-toggle="collapse" role="button" id="users">
+            <!-- <i class="menu-icon fa fa-list"></i> -->
+            <span>Users Management</span>
+            <b class="arrow fa fa-angle-down"></b>
+            <span>&#8250;</span>
+        </a>
 
-    <script type="module" src="sidebar.js"></script>
-</body>
-</html>
+        <ul class="collapse submenu" id="userMenu">
+            <li id="staff">
+                <a href="" id="staff">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Staff
+                </a>
+            </li>
+
+            <li id="customers">
+                <a href="" id="customers">
+                    <i class="menu-icon fa fa-caret-right"></i>
+                    Customers
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li class="btn-manager">
+        <a href="">
+            <span>Media</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+    <li class="btn-manager">
+        <a href="">
+            <span>Settings</span>
+            <span>&#8250;</span>
+        </a>
+    </li>
+</ul>

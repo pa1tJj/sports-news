@@ -6,7 +6,7 @@ export function setupHeader() {
             return res.text();
         })
         .then(function(res) {
-            document.querySelector(".header").innerHTML = res;
+            document.querySelector(".my-header").innerHTML = res;
         })
 }
 

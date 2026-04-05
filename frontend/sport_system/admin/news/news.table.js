@@ -6,7 +6,7 @@ export function renderTable(element, index, currentPage) {
                     <input class="form-check-input" type="checkbox" value="" data-id="${element.id}">
                 </div>
             </td>
-            <td class="stt">${(currentPage -1)* 5 + index + 1}</td>
+            <td class="stt">${(currentPage - 1)* 5 + index + 1}</td>
             <td>${element.title}</td>
             <td>${element.categoryName}</td>
             <td>${element.status}</td>

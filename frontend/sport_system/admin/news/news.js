@@ -2,7 +2,7 @@ import { populateSelectOptions } from "../../utils/select.util.js";
 import { buildParams } from "./custom/params.search.build.js";
 import { renderTable } from "./news.table.js";
 import {getAPINews} from "./news.api.js";
-import { initSearch, clickButtonEdit, clickAddNews } from "./news.evants.js";
+import { initSearch, clickButtonEdit, clickAddNews, initDialog, initCheckbox } from "./news.events.js";
 
 export async function getAllNews() {
     const responses = await getAPINews();
@@ -56,6 +56,8 @@ export async function getTableData(params = "") {
     var response = await getAPINews(params);
     newsList(response.list, currentPage);
     clickButtonEdit();
+    initDialog();
+    initCheckbox();
 }
 
 let currentPage = 1;
@@ -77,3 +79,5 @@ export function initPaging() {
         getTableData(param);
     })
 }
+
+

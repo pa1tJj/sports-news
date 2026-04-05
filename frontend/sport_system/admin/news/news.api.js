@@ -24,13 +24,11 @@ export async function getApiFormData() {
 
 export async function getApiSaveNews(data) {
     const api = data.id ? `http://localhost:8026/api/admin/news/${data.id}` : `http://localhost:8026/api/admin/news`;
-    console.log(api)
     const request = new FormData();
     const { thumbnail, ...newsData } = data;
     if (thumbnail.files.length > 0) {
         request.append("thumbnailNews", thumbnail.files[0]);
     }
-    console.log(data.thumbnail);
     request.append("newsRequest", new Blob(
         [JSON.stringify(newsData)], 
         { type: "application/json" }
@@ -41,4 +39,12 @@ export async function getApiSaveNews(data) {
     }
     const response = await fetch(api, posts);
     return await response.json();
+}
+
+export async function getApiDelete(id) {
+    const api = `http://localhost:8026/api/admin/news/${id}`;
+    const posts = {
+        method: "DELETE"
+    }
+    const res = await fetch(api, posts);
 }
