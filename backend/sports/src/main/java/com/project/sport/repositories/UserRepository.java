@@ -14,7 +14,7 @@ import com.project.sport.repositories.custom.UserRepositoryCustom;
 
 import jakarta.transaction.Transactional;
 
-@Transactional
+
 public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRepositoryCustom{
 	UserEntity findByUsername(String username);
 
@@ -22,6 +22,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 			, nativeQuery = true)
 	Page<UserEntity> findUsersExcludeRoles(@Param("roles") List<String> roles, Pageable pageable);
 	
+	@Transactional
 	@Modifying
 	@Query(value = "DELETE FROM user_role WHERE user_id IN (:ids)", nativeQuery = true)
 	void deleteUserRole(@Param("ids") List<Long> ids);
