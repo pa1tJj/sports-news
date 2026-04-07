@@ -18,12 +18,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
 	private final QueryUtils queryUtils;
 	@PersistenceContext
-	private final EntityManager entityManager;
+	private EntityManager entityManager;
 
 	private static final String COL_USERNAME = "users.username";
 	private static final String COL_PHONE = "users.phone";
