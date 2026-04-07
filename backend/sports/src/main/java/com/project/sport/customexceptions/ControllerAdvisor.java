@@ -42,4 +42,14 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler{
 		errors.setPath(request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errors);
 	}
+	
+	@ExceptionHandler
+	public ResponseEntity<ErrorMessage> handleTokenRefreshException(TokenRefreshException ex) {
+		Map<String, Object> errors = new HashMap<String, Object>();
+		ErrorMessage errorMessage = new ErrorMessage();
+		errorMessage.setTimestamp(LocalDateTime.now());
+		errorMessage.setStatus(HttpStatus.FORBIDDEN.value());
+		errorMessage.setErrors(errors);
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
+	}
 }

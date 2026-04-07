@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
+import com.project.sport.entities.UserEntity;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -31,8 +33,14 @@ public class JwtUtils {
 	@Value("${jonet.ent.jwt.expiration}")
 	private Long expiration;
 	
-	@Value("${jonet.ent.jwt.cookie}")
-	private String jwtCookie;
+	@Value("${jonet.ent.jwt.cookiesName}")
+	private String cookiesName;
+	
+	@Value("${jonet.ent.jwt.refreshCookiesName}")
+	private String refreshCookiesName;
+	
+	@Value("${jonet.ent.jwt.refreshExpiration}")
+	private Long refreshExpiration;
 	
 	private Key getSingingKeys() {
 		byte[] bytes = Decoders.BASE64.decode(jwtSecret);
@@ -49,23 +57,57 @@ public class JwtUtils {
 		return token;
 	}
 	
-	public ResponseCookie generateJwtCookie(UserDetails userDetails) {
+	public ResponseCookie generateJwtCookies(UserDetails userDetails) {
 		String token = generateToken(userDetails.getUsername());
-		ResponseCookie cookie = ResponseCookie.from("accessToken", token)
+		return generateCookies(cookiesName, token, "/", 3600);
+	}
+	
+	public ResponseCookie generateCookies(String name, String value, String path, long maxAge) {
+		ResponseCookie cookie = ResponseCookie.from(name, value)
 				                              .httpOnly(true)// Ngăn chặn XSS, JavaScript không thể đọc được token
 				                              .secure(false) // chỉ gửi qua HTTPS
 				                              .sameSite("Lax") //chống CSRF
-				                              .path("/") //có hiệu lực cho toàn bộ domain
-				                              .maxAge(300) //thời gian sống của cookie
+				                              .path(path) //có hiệu lực cho toàn bộ domain
+				                              .maxAge(maxAge) //thời gian sống của cookie
 				                              .build();
 		return cookie;
 	}
+
+	public ResponseCookie generateJwtCookies(UserEntity userEntity) {
+		String token = generateToken(userEntity.getUsername());
+		return generateCookies(cookiesName, token, "/", 3600);
+	}
+	
+	public ResponseCookie generateRefreshJwtCookies(String refreshToken, String path) {
+		return generateCookies(refreshCookiesName, refreshToken, path, 86400);
+	}
 	
 	public ResponseCookie getCleanJwtCookie() {
-		ResponseCookie cookie = ResponseCookie.from(jwtCookie, null).path("/").build();
+		ResponseCookie cookie = ResponseCookie.from(cookiesName, null).maxAge(0).path("/").build();
 		return cookie;
 	}
 
+	public ResponseCookie getCleanRefreshJwtCookie() {
+		ResponseCookie cookie = ResponseCookie.from(refreshCookiesName, null).maxAge(0).path("/").build();
+		return cookie;
+	}
+	
+	public String getCookieValueByName(HttpServletRequest request, String name) {
+		Cookie cookie = WebUtils.getCookie(request, name);
+		if(cookie != null) {
+			return cookie.getValue();
+		} else {
+			return null;
+		}
+	}
+	
+	public String getJwtFromCookies(HttpServletRequest request) {
+		return getCookieValueByName(request, cookiesName);
+	}
+	
+	public String getRefreshJwtFromCookies(HttpServletRequest request) {
+		return getCookieValueByName(request, refreshCookiesName);
+	}
 	
 	public String getUsernameFromToken(String token) {
 		return Jwts.parserBuilder()
@@ -76,14 +118,6 @@ public class JwtUtils {
 				.getSubject();
 	}
 	
-	public String getJwtFromCookie(HttpServletRequest request) {
-		Cookie cookie = WebUtils.getCookie(request, jwtCookie);
-		if(cookie != null) {
-			return cookie.getValue();
-		} else {
-			return null;
-		}
-	}
 	
 	public Boolean validateJwtToken(String token) {
 		try {

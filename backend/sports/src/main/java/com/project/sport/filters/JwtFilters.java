@@ -26,7 +26,7 @@ public class JwtFilters extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		try {
-			String jwt = jwtUtils.getJwtFromCookie(request);
+			String jwt = jwtUtils.getJwtFromCookies(request);
 			if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
 				String username = jwtUtils.getUsernameFromToken(jwt);
 				MyUserDetails user = (MyUserDetails) userDetailsService.loadUserByUsername(username);
