@@ -42,8 +42,6 @@ public class RefreshTokenServiceImpl implements RefreshTokenService{
 
 	@Override
 	public RefreshTokenEntity verifyExpiration(RefreshTokenEntity tokenEntity) {
-		System.out.println("DEBUG - Giờ hiện tại (System): " + Instant.now());
-		System.out.println("DEBUG - Giờ hết hạn (DB):      " + tokenEntity.getExpiryDate());
 		if (tokenEntity.getExpiryDate().compareTo(Instant.now()) < 0) {
 			refreshTokenRepository.delete(tokenEntity);
 		}
