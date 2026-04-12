@@ -1,5 +1,7 @@
 package com.project.sport.services.auth.impl;
 
+import java.util.UUID;
+
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,61 +11,57 @@ import org.springframework.stereotype.Service;
 
 import com.project.sport.dto.request.user.UserLoginRequest;
 import com.project.sport.dto.response.JwtCookiesResponse;
-import com.project.sport.entities.RefreshTokenEntity;
+import com.project.sport.entities.UserEntity;
 import com.project.sport.models.MyUserDetails;
+import com.project.sport.repositories.UserRepository;
 import com.project.sport.services.auth.AuthService;
-import com.project.sport.services.auth.RefreshTokenService;
 import com.project.sport.utils.JwtUtils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements AuthService{
+public class AuthServiceImpl implements AuthService {
 	private final AuthenticationManager authenticationManager;
 	private final JwtUtils jwtUtils;
-	private final RefreshTokenService refreshTokenService;
-	private final JwtCookiesResponse jwtCookieResponse;
+	private final RefreshTokenServiceRedisImpl refreshTokenServiceRedisImpl;
+	private final UserRepository userRepository;
 
 	@Override
 	public JwtCookiesResponse getJwtCookies(UserLoginRequest request) {
-		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword());
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+				request.getUsername(), request.getPassword());
 		Authentication authentication = authenticationManager.authenticate(authenticationToken);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-		jwtCookieResponse.setJwtCookies(jwtUtils.generateJwtCookies(userDetails));
-		RefreshTokenEntity refreshTokenEntity = refreshTokenService.createRefreshToken(userDetails.getId());
-		jwtCookieResponse.setJwtRefreshCookies(jwtUtils.generateRefreshJwtCookies(refreshTokenEntity.getToken(), "/api/auth/refresh-token"));
-		return jwtCookieResponse;
+		
+		String token = UUID.randomUUID().toString();
+		ResponseCookie accessCookies = jwtUtils.generateJwtCookies(userDetails);
+		ResponseCookie refreshCookies = jwtUtils.generateRefreshJwtCookies(token, "/api/auth");
+		
+		refreshTokenServiceRedisImpl.saveRefreshTokenToRedis(token, userDetails.getUsername());
+		return new JwtCookiesResponse(accessCookies, refreshCookies);
 	}
-	
+
 	@Override
-	public String getCookiesByRefreshCokies(HttpServletRequest request) {
-		String refreshToken = jwtUtils.getRefreshJwtFromCookies(request);
-	    if (refreshToken != null && !refreshToken.isEmpty()) {
-	        return refreshTokenService.findByToken(refreshToken)
-	            .map(refreshTokenService::verifyExpiration) // Hàm này nên ném Exception nếu hết hạn
-	            .map(tokenEntity -> {
-	                ResponseCookie cookie = jwtUtils.generateJwtCookies(tokenEntity.getUser());
-	                return cookie.toString();
-	            })
-	            .orElse(null);
-	    }
-	    return null;
+	public JwtCookiesResponse getCookiesByRefreshCokies(String jwtRefreshCookies) {
+		String username = refreshTokenServiceRedisImpl.exchangeTokenForUsername(jwtRefreshCookies);
+		UserEntity user = userRepository.findByUsername(username);
+		
+		String refreshToken = UUID.randomUUID().toString();
+		ResponseCookie accessCookies = jwtUtils.generateJwtCookies(user);
+		ResponseCookie refreshCookies = jwtUtils.generateRefreshJwtCookies(refreshToken, "/api/auth");
+		
+		refreshTokenServiceRedisImpl.saveRefreshTokenToRedis(refreshToken, user.getUsername());
+		return new JwtCookiesResponse(accessCookies, refreshCookies);
 	}
-	
+
+
 	@Override
-	public JwtCookiesResponse getLogout() {
-		Object principle = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(principle.toString() != "anonymousUser") {
-			Long userId = ((MyUserDetails) principle).getId();
-			refreshTokenService.deleteByUserId(userId);
-		}
-		ResponseCookie jwtCookies = jwtUtils.getCleanJwtCookie();
-		ResponseCookie jwtRefreshCookies = jwtUtils.getCleanRefreshJwtCookie();
-		jwtCookieResponse.setJwtCookies(jwtCookies);
-		jwtCookieResponse.setJwtRefreshCookies(jwtRefreshCookies);
-		return jwtCookieResponse;
+	public JwtCookiesResponse getLogout(String jwtRefreshCookies) {
+		refreshTokenServiceRedisImpl.deleteKeyInRedis("refresh-token:" + jwtRefreshCookies);
+		ResponseCookie accessCookies = jwtUtils.getCleanJwtCookie();
+		ResponseCookie refreshCookies = jwtUtils.getCleanRefreshJwtCookie();
+		return new JwtCookiesResponse(accessCookies, refreshCookies);
 	}
 }

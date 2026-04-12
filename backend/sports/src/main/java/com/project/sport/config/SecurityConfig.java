@@ -33,7 +33,7 @@ public class SecurityConfig {
 	private final JwtUtils jwtUtils;
 	
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.cors(Customizer.withDefaults())
 		    .csrf(csrf -> csrf 
 		    		.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()) // frontend có thể đọc để gửi lại trong header
@@ -70,7 +70,7 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) {
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
 	

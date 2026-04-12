@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.sport.dto.request.user.UserLoginRequest;
 import com.project.sport.dto.response.JwtCookiesResponse;
 import com.project.sport.services.auth.AuthService;
+import com.project.sport.utils.JwtUtils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -20,14 +21,15 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 	private final AuthService authService;
+	private final JwtUtils jwtUtils;
 
 	@PostMapping("/signin")
 	public ResponseEntity<?> getLogin(@Valid @RequestBody UserLoginRequest userLoginRequest) {
 		try {
-			JwtCookiesResponse cookie = authService.getJwtCookies(userLoginRequest);
+			JwtCookiesResponse cookiesResponse = authService.getJwtCookies(userLoginRequest);
 			return ResponseEntity.ok()
-					.header(HttpHeaders.SET_COOKIE, cookie.getJwtCookies().toString())
-					.header(HttpHeaders.SET_COOKIE, cookie.getJwtRefreshCookies().toString())
+					.header(HttpHeaders.SET_COOKIE, cookiesResponse.getJwtCookies().toString())
+					.header(HttpHeaders.SET_COOKIE, cookiesResponse.getJwtRefreshCookies().toString())
 					.body("login success");
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
@@ -37,7 +39,11 @@ public class AuthController {
 	@PostMapping("/refresh-token")
 	public ResponseEntity<?> getRefreshToken(HttpServletRequest request) {
 		try {
-			return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, authService.getCookiesByRefreshCokies(request))
+			String jwtRefreshCookies = jwtUtils.getRefreshJwtFromCookies(request);
+			JwtCookiesResponse cookiesResponse = authService.getCookiesByRefreshCokies(jwtRefreshCookies);
+			return ResponseEntity.ok()
+					.header(HttpHeaders.SET_COOKIE, cookiesResponse.getJwtCookies().toString())
+					.header(HttpHeaders.SET_COOKIE, cookiesResponse.getJwtRefreshCookies().toString())
 					.body("Token is refreshed successfully!");
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body("Refresh Token is empty!");
@@ -45,9 +51,10 @@ public class AuthController {
 	}
 	
 	@PostMapping("/signout")
-	public ResponseEntity<?> getLogout() {
+	public ResponseEntity<?> getLogout(HttpServletRequest request) {
 		try {
-			JwtCookiesResponse jwtCookie = authService.getLogout();
+			String jwtRefreshCookies = jwtUtils.getRefreshJwtFromCookies(request);
+			JwtCookiesResponse jwtCookie = authService.getLogout(jwtRefreshCookies);
 			return ResponseEntity.ok()
 					.header(HttpHeaders.SET_COOKIE, jwtCookie.getJwtCookies().toString())
 					.header(HttpHeaders.SET_COOKIE, jwtCookie.getJwtRefreshCookies().toString())

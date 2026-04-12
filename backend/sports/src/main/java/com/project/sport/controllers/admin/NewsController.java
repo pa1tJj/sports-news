@@ -32,17 +32,16 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/admin/")
 @RequiredArgsConstructor
 public class NewsController {
-	private final DataResponses responses;
 	private final NewsService newsService;
 	private final FileStorageService fileStorageService;
 
 	@GetMapping("/news")
 	public ResponseEntity<DataResponses> getNews(NewsSearchRequest newsRequest) {
-		responses.setList(newsService.getNews(newsRequest,
-				PageRequest.of(newsRequest.getPage() - 1, newsRequest.getPageSize())));
-		responses.setObject(newsService.getNewsFilterData());
-		responses.setTotalPage(newsService.totalPage());
-		return ResponseEntity.ok(responses);
+		var newsList = newsService.getNews(newsRequest,
+				PageRequest.of(newsRequest.getPage() - 1, newsRequest.getPageSize()));
+		var newsFilter = newsService.getNewsFilterData();
+		var totalPage = newsService.totalPage();
+		return ResponseEntity.ok(DataResponses.of(newsList, newsFilter, totalPage));
 	}
 	
 	@GetMapping(value = "/news/{id}")

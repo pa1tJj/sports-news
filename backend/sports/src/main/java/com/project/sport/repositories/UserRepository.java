@@ -16,6 +16,7 @@ import jakarta.transaction.Transactional;
 
 
 public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRepositoryCustom{
+	
 	UserEntity findByUsername(String username);
 
 	@Query(value = "SELECT u.* FROM users u INNER JOIN user_role ur ON u.id = user_id INNER JOIN roles r ON r.id = role_id WHERE r.code IN (:roles)"

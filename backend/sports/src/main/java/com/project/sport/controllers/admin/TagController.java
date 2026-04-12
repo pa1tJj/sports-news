@@ -27,14 +27,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TagController {
 	private final TagsService tagsService;
-	private final DataResponses dataResponses;
 	
 	@GetMapping("/tags")
 	public ResponseEntity<DataResponses> getTags(@RequestParam(name = "name") String name, @RequestParam(name = "page", defaultValue = "1") Integer page) {
 		try {
-			dataResponses.setList(tagsService.getTags(name, PageRequest.of(page - 1, 5)));
-			dataResponses.setTotalPage(tagsService.totalPage());
-			return ResponseEntity.ok(dataResponses);
+			var tags = tagsService.getTags(name, PageRequest.of(page - 1, 5));
+			var totalPage = tagsService.totalPage();
+			return ResponseEntity.ok(DataResponses.withList(tags, totalPage));
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
 		}

@@ -28,15 +28,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/admin")
 public class StaffController {
 	private final UserService userService;
-	private final DataResponses dataResponses;
 	
 	@GetMapping("/users")
 	public ResponseEntity<DataResponses> getUsersByStafRole(@RequestParam(name = "page", defaultValue = "1") Integer page) {
 		try {
-			dataResponses.setList(userService.getUsersByStaffRole(PageRequest.of(page - 1, 2)));
-			dataResponses.setTotalPage(userService.totalPage());
-			dataResponses.setObject(userService.getUserOptionForm());
-			return ResponseEntity.ok(dataResponses);
+			var staff = userService.getUsersByStaffRole(PageRequest.of(page - 1, 2));
+			var totalPage = userService.totalPage();
+			var optionForms = userService.getUserOptionForm();
+			return ResponseEntity.ok(DataResponses.of(staff, optionForms, totalPage));
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
 		}
